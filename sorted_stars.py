@@ -17,7 +17,8 @@ def app_key(item):
 def abs_key(item):
     return item[3]
 
-
+left = []
+right = []
 
 data = [
 ('Alpha Centauri A', 4.3, 0.26, 1.56),
@@ -33,29 +34,31 @@ data = [
 ('Ross 154', 9.4, 0.00002, 0.0005),
 ]
 
-
+    
 def distance():
     a = (sorted(data, key = dist_key, reverse = True))
     print 'Ranked by Distance'
-    for i in range(0, len(data)):
-        print(a[i][0], a[i][1])
+    alpha =[([a[i][0], a[i][1]]) for i in range(0, len(data))]
+    for uno, dos in alpha:
+        pprint([uno, dos])
     print '\n'
 
 def apparent():
     b = sorted(data, key = app_key, reverse = True)
     print 'Ranked by Apparent Brightness'
-    for i in range(0, len(data)):
-        print(b[i][0], b[i][2])
+    alpha =[([b[i][0], b[i][2]]) for i in range(0, len(data))]
+    for uno, dos in alpha:
+        pprint([uno, dos])
     print '\n'
 
 def absolute():
     c = sorted(data, key = abs_key, reverse = True)
     print 'Ranked by Absolute Brightness'
-    for i in range(0, len(data)):
-        print(c[i][0], c[i][3])
+    alpha =[([c[i][0], c[i][3]]) for i in range(0, len(data))]
+    for uno, dos in alpha:
+        pprint([uno, dos])
     print '\n'
 
 distance()
 apparent()
 absolute()
-
