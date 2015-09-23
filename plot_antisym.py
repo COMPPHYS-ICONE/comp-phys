@@ -45,25 +45,28 @@ if __name__ == "__main__":
     
     
     fig = plt.figure()
-    plt.title('Antisymmetric Spatial Wave Function')
+    plt.suptitle('Antisymmetric Spatial Wave Function')
     ax = fig.add_subplot(121, projection = '3d')
-    x = y = np.linspace(-x1,x2,100)
+    x = y = np.linspace(0,1.0,100)
     xv, yv = np.meshgrid(x,y)
     wave_f, prob_dens = antisym(xv,yv,n1 = 1, n2 = 2, a = 1.0)#2 rows, 1 column, first of the two
     #ax.plot_wireframe(xv, yv, z, rstride=1, cstride=1, linewidth = 1)
-    ax.plot_surface(xv, yv, wave_f, rstride=3, cstride=3, cmap=cm.Paired, linewidth = 0)
+    ax.plot_surface(xv, yv, wave_f, rstride=3, cstride=3, cmap=cm.OrRd, linewidth = 0)
     fig.subplots_adjust(top=0.85) # without this, won't be able to see plot title(moves plot down a little bit)
-    plt.suptitle('Wave Function')
+    plt.title('Wave Function')
+    ax.set_xlabel('x')
+    ax.set_ylabel('y')
 
     #plt.plot(x, y1, 'r.', lw = 2)
     #plt.grid(True)
-    ax.set_ylabel('y1')
 
     bx = plt.subplot(122, projection ='3d')# 2 rows, 1 column, second of two       #both ways are perfectly legal
     #ax.plot_wireframe(xv, yv, z, rstride=10, cstride=10, linewidth = 1)
-    bx.plot_surface(xv, yv, prob_dens, rstride=3, cstride=3, cmap=cm.Paired, linewidth = 0)
+    bx.plot_surface(xv, yv, prob_dens, rstride=3, cstride=3, cmap=cm.OrRd, linewidth = 0)
+    bx.set_xlabel('x')
+    bx.set_ylabel('y')
     fig.subplots_adjust(top=0.85)
-    plt.suptitle('Probability Density')
+    plt.title('Probability Density')
     
     #plt.xlabel('x')
     #plt.ylabel('y2')
