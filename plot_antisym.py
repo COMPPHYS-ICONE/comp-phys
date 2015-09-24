@@ -67,7 +67,7 @@ if __name__ == "__main__":
     bx.set_ylabel('y')
     fig.subplots_adjust(top=0.95)
     plt.title('Probability Density')
-    plt.figtext(.1, .04, 'The "effective" interaction between two neutral Fermions(both spin up) that arises from the\n symmetry requirement on the total wave function.')
+    plt.figtext(.1, .04, 'The "effective" interaction between two neutral Fermions (both spin up) that arises from the\n symmetry requirement on the total wave function.')
     
     #plt.xlabel('x')
     #plt.ylabel('y2')
