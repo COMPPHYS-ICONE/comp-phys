@@ -12,11 +12,11 @@ density. x1 and x2 are inputted by the user at the command prompt
    
 Call signature  :
 
-    python gamma.py -t 9.784 -tol .001 
+    python plot_antisym.py -x1 1 -x2 3 
     
     To run doctests in verbose mode:
     
-    python -m doctest -v gamma.py
+    python -m doctest -v plot_antisym.py
     
     
 '''
@@ -65,8 +65,9 @@ if __name__ == "__main__":
     bx.plot_surface(xv, yv, prob_dens, rstride=3, cstride=3, cmap=cm.OrRd, linewidth = 0)
     bx.set_xlabel('x')
     bx.set_ylabel('y')
-    fig.subplots_adjust(top=0.85)
+    fig.subplots_adjust(top=0.95)
     plt.title('Probability Density')
+    plt.figtext(.1, .04, 'The "effective" interaction between two neutral Fermions(both spin up) that arises from the\n symmetry requirement on the total wave function.')
     
     #plt.xlabel('x')
     #plt.ylabel('y2')
