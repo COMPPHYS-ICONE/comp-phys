@@ -8,8 +8,6 @@ poor attempt at a genealogy tree
 
 have mercy on my soul
 
-uncomment find_names() if you want to create the text file of names
-
 '''
 
 
@@ -19,6 +17,7 @@ import urllib2
 import re
 import networkx as nx
 import matplotlib.pyplot as plt
+import copy
 
 
 
@@ -198,7 +197,6 @@ std = {}
 living_dolphins = []
 dead_dolphins = []
 dolphins_num = []
-global dolphins_year
 dolphins_year = []
 dolphins_mean = []
 dolphins_std = []
@@ -248,6 +246,8 @@ def run_trial(j):
         advance_year(i)
         dolphins_year.append(len(living_dolphins))
         if i == 70:
+            rnd.shuffle(living_dolphins)
+            global my_dolphin
             my_dolphin = living_dolphins[1] # My main character
     
             
@@ -259,10 +259,10 @@ def run_all_trials(n):
         global breeding
         breeding = 0
         global living_dolphins
+        global dolphins_year
         living_dolphins = [Dolphins('Billy',0,1,'Male'), Dolphins('Joey',2,3,'Male'), \
                            Dolphins('Terry',4,5,'Female'), Dolphins('Patricia',6,7,'Female')]
         dolphins_num.append(dolphins_year)
-        global dolphins_year
         dolphins_year = []
         global dead_dolphins
         dead_dolphins = []
@@ -296,12 +296,12 @@ plt.show()
 #genealogy tree general
 G=nx.Graph()
 
-G.add_edge('Main Character','Dad',weight=0.8)
-G.add_edge('Main Character','Mom',weight=0.8)
-G.add_edge('Sister','Mom',weight=0.8)
-G.add_edge('Sister','Dad',weight=0.8)
-G.add_edge('Half-Brother','Mom',weight=1.6)
-G.add_edge('Half-Sister','Dad',weight=1.6)
+G.add_edge(my_dolphin.name,my_dolphin.mother,weight=0.8)
+G.add_edge(my_dolphin.name,my_dolphin.father,weight=0.8)
+#G.add_edge('Sister','Mom',weight=0.8)
+#G.add_edge('Sister','Dad',weight=0.8)
+#G.add_edge('Half-Brother','Mom',weight=1.6)
+#G.add_edge('Half-Sister','Dad',weight=1.6)
 
 elarge=[(u,v) for (u,v,d) in G.edges(data=True) if d['weight'] >0.5]
 esmall=[(u,v) for (u,v,d) in G.edges(data=True) if d['weight'] <=0.5]
@@ -321,3 +321,4 @@ nx.draw_networkx_labels(G,pos,font_size=20,font_family='sans-serif')
 plt.axis('off')
 plt.savefig("genealogy.pdf") 
 plt.show() 
+
