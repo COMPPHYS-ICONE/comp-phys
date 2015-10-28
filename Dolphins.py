@@ -1,12 +1,12 @@
 '''
 
-simulates a dolphin population for a certain number of years
+run_all_trials simulates a dolphin population for a certain number of years
+& saves a graph of evolving population + graph of geneology(sort of) for random 
+dolphin picked at year 70
+ 
+how_many_males calculates the minimum probability of males needed to sustain
+the population for 150 years
 
-saves a graph of evolving population
-
-poor attempt at a genealogy tree
-
-have mercy on my soul
 
 '''
 
@@ -22,17 +22,47 @@ import copy
 
 
 #################################################################################
+global year
+year = 0
+global breeding
+breeding = 0
+global living_dolphins
+global dolphins_year
+global my_dolphin
+global dead_dolphins
+global p
+global alpha
 
-    
-def gender():
-    if rnd.randint(0,2) == 0:
-        return 'Male'
-    else:
+p = .5
+half =.5
+
+
+#instansiating lists and dictionaries
+mean = {}
+std = {}
+living_dolphins = []
+dead_dolphins = []
+dolphins_num = []
+dolphins_year = []
+dolphins_mean = []
+dolphins_std = []
+full_dict = {}
+p_list = []
+
+      
+
+
+
+
+def gender(p):
+    if np.random.rand() > p:
         return 'Female'
+    else:
+        return 'Male'
 
 
 class Dolphins:
-    def __init__(self, name, mother, father, sex = gender()):
+    def __init__(self, name, mother, father, sex = gender(p)):
         self.name = name
         self.sex = sex
         self.age = 0
@@ -55,34 +85,37 @@ class Dolphins:
         and self.father != partner.name\
         and partner.mother != self.name\
         and partner.father != self.name\
-        and self.age >= 8 and self.since_laid > 5\
-        and partner.age >= 8 and partner.since_laid > 5\
-        and abs(self.age-partner.age) <= 10\
+        and self.age > 8 and self.since_laid > 5\
+        and partner.age > 8 and partner.since_laid > 5\
+        and abs(self.age-partner.age) < 10\
         and (self.mother != partner.mother or self.father != partner.father)):
             return True
         
         
+living_dolphins = [Dolphins('Billy','Mom','Dad','Male'), Dolphins('Joey','Mom',"Dad",'Male'), \
+                           Dolphins('Terry','Mommy','Daddy','Female'), Dolphins('Patricia','Mommy','Daddy','Female')]
+
 
 #advances the year and prints all the appropriate statements   
-def advance_year(i):
+def advance_year(i,p):
     global year
-    global breeding 
+    global breeding
     if (i == 0 or i == 25 or i == 50 or i == 75 or i ==100 or i ==125):
         print '**********************'
         print 'entering year {:g} with {:g} dolphins, with {:g} breeding.'\
         .format(year,len(living_dolphins),breeding)
     breeding = 0
-    
     for k in living_dolphins:
         k.aging()
-        if k.prob_eligible() == True and k.sex == 'Male':
-            for j in living_dolphins:
-                marvin_gaye(k,j)
         if (k.age > k.death and k.dead == 0):
             dead_dolphins.append(k)
             k.dead = 1
         if k.dead ==1:
+            living_dolphins.remove(k)
             del k
+        elif k.prob_eligible() == True and k.sex == 'Male':
+            for j in living_dolphins:
+                marvin_gaye(k,j,p)
     if i == 100:
         print 'At year 100, there are {:g} living dolphins. There have been {:g} births, in total.'\
         .format(len(living_dolphins), (len(living_dolphins)+len(dead_dolphins)))
@@ -91,29 +124,29 @@ def advance_year(i):
         print 'at year 149, there are {:g} living dolphins'.format(len(living_dolphins))
     
     year += 1
+    return living_dolphins
     
     
         
         
 #sexytime and babytime        
-def marvin_gaye(self,partner):
+def marvin_gaye(self,partner,p):
+    global breeding
     if self.eligibility(partner) == True:
         self.got_laid()
         partner.got_laid()
-        global breeding
         breeding +=1
+        temp = gender(p)
         if self.sex == 'Male':
-            temp = gender()
             if temp == 'Male':
-                living_dolphins.append(Dolphins(make_name(temp).next(),partner.name, self.name, temp))
+                living_dolphins.append(Dolphins(jesus.next(),partner.name, self.name, temp))
             if temp == 'Female':
-                living_dolphins.append(Dolphins(make_name(temp).next(),partner.name, self.name, temp))
+                living_dolphins.append(Dolphins(jesus.next(),partner.name, self.name, temp))
         if self.sex == 'Female':
-            temp = gender()
             if temp == 'Male':
-                living_dolphins.append(Dolphins(make_name(temp).next(),self.name, partner.name, temp))
+                living_dolphins.append(Dolphins(jesus.next(),self.name, partner.name, temp))
             if temp == 'Female':
-                living_dolphins.append(Dolphins(make_name(temp).next(),self.name, partner.name, temp))
+                living_dolphins.append(Dolphins(jesus.next(),self.name, partner.name, temp))
         
 
 #draws names from internet        
@@ -163,52 +196,30 @@ def find_names():
 
 #assigns names to dolphins    
 def make_name(sex):
+    
     if sex == 'Male':
         try:
-            for i in range(0, len(guy_names_list)):
+            for i in range(0, 5*len(guy_names_list)):
                 yield guy_names_list[i]
-                i +=1
         except StopIteration:
-            for i in range(0, len(guy_names_list)):
+            for i in range(0, 5*len(guy_names_list)):
                 yield middle_names_list[i]
-                i +=1
          
     if sex == 'Female':
         try:
-            for i in range(0, len(girl_names_list)):
+            for i in range(0, 5*len(girl_names_list)):
                 yield girl_names_list[i]
-                i +=1
         except StopIteration:
-            for i in range(0, len(guy_names_list)):
+            for i in range(0, 5*len(guy_names_list)):
                 yield middle_names_list[i]
-                i +=1
 
                 
-
-
-    
-                
+jesus = make_name('Male')
+jesusess = make_name('Female')              
                 
 #find_names() #uncomment to create name files
 
-#instansiating lists and dictionaries
-mean = {}
-std = {}
-living_dolphins = []
-dead_dolphins = []
-dolphins_num = []
-dolphins_year = []
-dolphins_mean = []
-dolphins_std = []
-full_dict = {}
-guys_names = make_name('Male')
-girls_names = make_name('Female')
-year = 0
-breeding = 0        
-for i in ['Ted', 'Bobby']:
-    living_dolphins.append(Dolphins(i,0,1,'Male'))
-for i in ['Terry', 'Alisha']:
-    living_dolphins.append(Dolphins(i,2,3,'Female'))
+
                 
 #######################################################
         
@@ -217,6 +228,9 @@ filename = "/Users/labuser/comp-phys/guys_names.txt"
 with open(filename,"r") as f:
     x = f.read()
     guy_names_list = eval(x)
+    guy_names_list += guy_names_list
+    guy_names_list += guy_names_list
+    guy_names_list += guy_names_list
     rnd.shuffle(guy_names_list)
     
             
@@ -224,12 +238,18 @@ filename = "/Users/labuser/comp-phys/gals_names.txt"
 with open(filename,"r") as f:
     x = f.read()
     girl_names_list = eval(x)
+    girl_names_list += girl_names_list
+    girl_names_list += girl_names_list
+    girl_names_list += girl_names_list
     rnd.shuffle(girl_names_list)
     
 filename = "/Users/labuser/comp-phys/middle_names.txt"
 with open(filename,"r") as f:
     x = f.read()
     middle_names_list = eval(x)
+    middle_names_list += middle_names_list
+    middle_names_list += middle_names_list
+    middle_names_list += middle_names_list
     rnd.shuffle(middle_names_list)                
 
 
@@ -239,86 +259,156 @@ with open(filename,"r") as f:
         
 
 
-def run_trial(j):
+def run_trial(j,p):
+    global living_dolphins
+    global dolphins_year
     print ''
     print 'Trial No. {:g}'.format(j)
     for i in range(0,150):
-        advance_year(i)
+        advance_year(i,p)
         dolphins_year.append(len(living_dolphins))
-        if i == 70:
+        if i == 120:
             rnd.shuffle(living_dolphins)
             global my_dolphin
-            my_dolphin = living_dolphins[1] # My main character
+            global my_dolphins_list
+            try:
+                my_dolphin = living_dolphins[1]
+                my_dolphins_list = living_dolphins# My main character
+            except IndexError:
+                print 'All the dolphins have died out! Please try again!'
+
+#specific to part b
+def run_trial_male(j,p):
+    global living_dolphins
+    global dolphins_year
+    print ''
+    for i in range(0,150):
+        advance_year(i,p)
+        if len(living_dolphins) <= 1:
+            print 'The dolphin population has died out!'
+            return 0
+        if i == 149:
+            if len(living_dolphins) >= 1:
+                print 'The dolphin population has survived! The probability of males was {:g}'.format(p)
+                return 1
     
             
-def run_all_trials(n):
+def run_all_trials(n,p = half):
+    global year
+    global breeding
+    global dolphins_year
+    global living_dolphins
+    global dead_dolphins
+    global alpha
+    alpha = 1
     for k in range (1,n+1):
-        run_trial(k)
-        global year
-        year = 0
-        global breeding
-        breeding = 0
-        global living_dolphins
-        global dolphins_year
-        living_dolphins = [Dolphins('Billy',0,1,'Male'), Dolphins('Joey',2,3,'Male'), \
-                           Dolphins('Terry',4,5,'Female'), Dolphins('Patricia',6,7,'Female')]
-        dolphins_num.append(dolphins_year)
-        dolphins_year = []
-        global dead_dolphins
-        dead_dolphins = []
+        if k == n+1:
+            run_trial(k,p)
+        else:
+            run_trial(k,p)
+            year = 0
+            breeding = 0
+            living_dolphins = [Dolphins('Billy','Mom','Dad','Male'), Dolphins('Joey','Mom',"Dad",'Male'), \
+                               Dolphins('Terry','Mommy','Daddy','Female'), Dolphins('Patricia','Mommy','Daddy','Female')]
+            dolphins_num.append(dolphins_year)
+            dolphins_year = []
+            dead_dolphins = []
     for j in range(0,150):
         dolphins_mean.append(np.mean([i[j] for i in dolphins_num]))
         dolphins_std.append(np.std([i[j] for i in dolphins_num]))
     
     return np.array(dolphins_mean), np.array(dolphins_std)       
             
+#specific to part b    
+def how_many_males(n):
+    global year
+    global breeding
+    global dolphins_year
+    global living_dolphins
+    global dead_dolphins
+    global p
+    global alpha
+    alpha = 0
+    for k in range (1,n+2):
+        p_list.append(p)
+        p = 0
+        myvar = 0
+        while myvar != 1:
+            myvar = run_trial_male(k,p)
+            p+=0.01
+            year = 0
+            breeding = 0
+            living_dolphins = [Dolphins('Billy','Mom','Dad','Male'), Dolphins('Joey','Mom',"Dad",'Male'), \
+                               Dolphins('Terry','Mommy','Daddy','Female'), Dolphins('Patricia','Mommy','Daddy','Female')]
+            dolphins_num.append(dolphins_year)
+            dolphins_year = []
+            dead_dolphins = []
+    del p_list[0]
+    #print p_list
+    return np.mean(p_list)
 
     
-    
-meanizzle, stdizzle = run_all_trials(10) #runs the trials and saves mean and std
+
+#meanizzle, stdizzle = run_all_trials(10) #runs the trials and saves mean and std
+
+#find out the minimum probability of males needed
+meanyp = how_many_males(10)
+print "\n\n\nThe average minimum probability for males was {:g}".format(meanyp)
+
+
 
 
 #Graphing components below
-
-fig = plt.figure()
-x = np.arange(0.0, len(meanizzle), 1)
-ax = fig.add_subplot(111)
-plt.plot(meanizzle,'r-', lw = 2)
-plt.fill_between(x,meanizzle+stdizzle, meanizzle-stdizzle)
-plt.title('Average Population and Standard Deviation from 10 Trials')
-plt.xlabel('Years')
-plt.ylabel('Number of Living Dolphins')
-plt.savefig("population_growth.pdf")
-plt.show()    
-
-
-
-#genealogy tree general
-G=nx.Graph()
-
-G.add_edge(my_dolphin.name,my_dolphin.mother,weight=0.8)
-G.add_edge(my_dolphin.name,my_dolphin.father,weight=0.8)
-#G.add_edge('Sister','Mom',weight=0.8)
-#G.add_edge('Sister','Dad',weight=0.8)
-#G.add_edge('Half-Brother','Mom',weight=1.6)
-#G.add_edge('Half-Sister','Dad',weight=1.6)
-
-elarge=[(u,v) for (u,v,d) in G.edges(data=True) if d['weight'] >0.5]
-esmall=[(u,v) for (u,v,d) in G.edges(data=True) if d['weight'] <=0.5]
-
-pos=nx.spring_layout(G)
-
-nx.draw_networkx_nodes(G,pos,node_size=700)
+if alpha == 1: #if running trails for part a not part b
+    fig = plt.figure()
+    x = np.arange(0.0, len(meanizzle), 1)
+    ax = fig.add_subplot(111)
+    plt.plot(meanizzle,'r-', lw = 2)
+    plt.fill_between(x,meanizzle+stdizzle, meanizzle-stdizzle)
+    plt.title('Average Population and Standard Deviation from 10 Trials')
+    plt.xlabel('Years')
+    plt.ylabel('Number of Living Dolphins')
+    plt.savefig("population_growth.pdf")
+    plt.show()    
 
 
-nx.draw_networkx_edges(G,pos,edgelist=elarge,
-                    width=6)
-nx.draw_networkx_edges(G,pos,edgelist=esmall,
-                    width=6,alpha=0.5,edge_color='b',style='dashed')
 
-nx.draw_networkx_labels(G,pos,font_size=20,font_family='sans-serif')
 
-plt.axis('off')
-plt.savefig("genealogy.pdf") 
-plt.show() 
+
+
+    #genealogy tree general
+    G=nx.Graph()
+
+    G.add_edge(my_dolphin.name,my_dolphin.mother,weight=0.8)
+    G.add_edge(my_dolphin.name,my_dolphin.father,weight=0.8)
+    for names in my_dolphins_list:
+        if (names.mother == my_dolphin.mother and names.father == my_dolphin.father):
+            G.add_edge(names.name,my_dolphin.mother,weight=0.3)
+            G.add_edge(names.name,my_dolphin.father,weight=0.3)
+        if (names.mother == my_dolphin.mother and names.father == my_dolphin.father):
+            G.add_edge(names.name,my_dolphin.mother,weight=0.3)
+            G.add_edge(names.name,my_dolphin.father,weight=0.3) 
+        if names.mother == my_dolphin.mother:
+            G.add_edge(names.name,my_dolphin.mother,weight=0.5)
+        if names.father == my_dolphin.father:
+            G.add_edge(names.name,my_dolphin.father,weight=0.5)
+
+    elarge=[(u,v) for (u,v,d) in G.edges(data=True) if d['weight'] >0.5]
+    esmall=[(u,v) for (u,v,d) in G.edges(data=True) if d['weight'] <=0.5]
+
+    pos=nx.spring_layout(G)
+
+    nx.draw_networkx_nodes(G,pos,node_size=700)
+
+
+    nx.draw_networkx_edges(G,pos,edgelist=elarge,
+                        width=6)
+    nx.draw_networkx_edges(G,pos,edgelist=esmall,
+                        width=6,alpha=0.5,edge_color='b',style='dashed')
+
+    nx.draw_networkx_labels(G,pos,font_size=20,font_family='sans-serif')
+
+    plt.axis('off')
+    plt.savefig("genealogy.pdf") 
+    plt.show() 
 
