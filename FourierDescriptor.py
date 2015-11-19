@@ -7,8 +7,18 @@ import argparse
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-order', type = float)
+parser.add_argument('--no-norm', dest='norm',  action='store_false') 
+parser.add_argument('-zeroth', dest = 'no_zeroth',  action='store_false') 
+parser.set_defaults(no_zeroth=True, norm=True)
 args = parser.parse_args()
 order = args.order
+no_norm = args.norm
+zeroth = args.no_zeroth
+
+print order, type(order)
+print no_norm, type(no_norm)
+print zeroth, type(zeroth)
+
 
 def extract_shape(im_file, blowup = 1., plot_img = False, plot_contour = False, plot_contour_pts = False):
     x_arr = []
@@ -80,7 +90,7 @@ def filt_FD(Z, n_keep, no_zeroth = True):
     #print Z.real[N/2]
     return Z*filt
     
-def get_FD_abs(x, y, order, norm = True, no_zeroth = True):
+def get_FD_abs(x, y, order, norm = no_norm, no_zeroth = zeroth):
     '''Finds the Fourier Descriptors and the recovered x and y for a shape.'''
     Z = []
     fd_mag = []
@@ -91,7 +101,7 @@ def get_FD_abs(x, y, order, norm = True, no_zeroth = True):
         print 'len(Z)', len(Z)
         print 'Shape of Z', Z.shape
 
-        Z_filt = filt_FD(Z, order, no_zeroth=no_zeroth)
+        Z_filt = filt_FD(Z, order, no_zeroth=zeroth)
         if norm:
             print type(Z_filt)
             print Z_filt.shape
@@ -152,5 +162,3 @@ for i in range(0, len(cs_paths)):
     plt.plot(fd_mag3[i], 'r8')
 plt.savefig("FourierDescriptor_numbers126.pdf") 
 plt.show()
-
-
