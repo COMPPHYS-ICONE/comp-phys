@@ -33,15 +33,15 @@ for i in phys_list:
     X.append(interpol_im(i, dim1 = 45, dim2 = 60))
 
 X = np.vstack(X)
-print(X.shape)
+#print(X.shape)
 y = np.array([1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0])
-print(y.shape)
+#print(y.shape)
 
 
 
 
 checker = 0
-for i in range(len(phys_list)):
+for i in range(len(y)):
     Xtrain = np.delete(X, i, axis = 0)
     ytrain = np.delete(y, i)
     Xtest = X[i].reshape(1, -1)
@@ -62,7 +62,5 @@ print('Percentage correct: {:f}%, {:d}'.format(100*(float(checker)/len(phys_list
 
 alpie = pca_svm_pred('unseen_phys1.jpg', md_pca2, md_clf2)
 betbee = pca_svm_pred('unseen_phys2.jpg', md_pca2, md_clf2)
-print(alpie)
-print(betbee)
 print('PCA+SVM prediction for physicist 1:', phys_dict[alpie])
 print('PCA+SVM prediction for physicist 2:', phys_dict[betbee])
