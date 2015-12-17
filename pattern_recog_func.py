@@ -47,8 +47,11 @@ def pca_svm_pred(imfile, md_pca, md_clf, dim1 = 45, dim2 = 60):
     X_proj = md_pca.transform(interp_im)
     return md_clf.predict(X_proj)[0]
     
-def pca_X(X, n_comp = 10):
-    md_pca = PCA(n_comp)
+def pca_X(X, n_comp = 10, whiten = False):
+    if whiten == True:
+        md_pca = PCA(n_comp, whiten = True)
+    else:
+        md_pca = PCA(n_comp)
     md_pca.fit(X)
     X_proj = md_pca.transform(X)
     return md_pca, X_proj

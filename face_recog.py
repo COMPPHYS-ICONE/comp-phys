@@ -45,7 +45,7 @@ for i in range(len(y)):
     Xtrain = np.delete(X, i, axis = 0)
     ytrain = np.delete(y, i)
     Xtest = X[i].reshape(1, -1)
-    md_pca2, X_proj2 = pca_X(Xtrain, n_comp = 10)
+    md_pca2, X_proj2 = pca_X(Xtrain, n_comp = 10, whiten = True)
     
     Xtrain_proj = md_pca2.transform(Xtrain)
     Xtest_proj = md_pca2.transform(Xtest)
